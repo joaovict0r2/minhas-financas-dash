@@ -1,17 +1,14 @@
 import type { Metadata } from "next";
-import { SidebarProvider } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/app/ui/dashboard/sidebar/sidebar"
 import localFont from "next/font/local";
-import "./ui/globals.css";
-import Header from "./ui/Header/Header";
+import "../assets/style/globals.css";
 
 const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
+  src: "../shared/fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
 });
 const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
+  src: "../shared/fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
 });
@@ -31,14 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SidebarProvider>
-          <AppSidebar />
-
-          <main className="w-full py-2 px-4">
-            <Header sticky />
-            {children}
-          </main>
-        </SidebarProvider>
+        {children}
       </body>
     </html>
   );

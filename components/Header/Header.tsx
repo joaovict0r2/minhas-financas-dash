@@ -5,7 +5,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
 import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/utils";
 
 type HeaderProps = {
   sticky?: boolean

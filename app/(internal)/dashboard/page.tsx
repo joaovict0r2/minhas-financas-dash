@@ -1,3 +1,4 @@
+import { decrypt } from "@/app/_lib/session";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -8,8 +9,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { DollarSign, MoveDownRight, MoveUpRight } from "lucide-react";
+import { cookies } from "next/headers";
 
-function Dashboard() {
+async function Dashboard() {
+  const cookie = (await cookies()).get('session')?.value
+  const session = await decrypt(cookie)
+
+  console.log(session)
+
   const invoices = [
     {
       invoice: "INV001",
