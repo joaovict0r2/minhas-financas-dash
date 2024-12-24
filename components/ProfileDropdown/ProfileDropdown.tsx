@@ -24,20 +24,7 @@ function ProfileDropdown() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            Profile
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Billing
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
-          </DropdownMenuItem>
-          <DropdownMenuItem>New Team</DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={logout}>
+        <DropdownMenuItem onClick={logout} className="cursor-pointer">
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

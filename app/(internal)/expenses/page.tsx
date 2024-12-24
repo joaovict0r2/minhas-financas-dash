@@ -1,3 +1,4 @@
+import { getExpenses } from "@/app/_data/expenses";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
@@ -8,160 +9,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { formatter, invoiceType } from "@/shared/utils";
 
-function Expenses() {
-  const invoices = [
-    {
-      invoice: "INV001",
-      paymentStatus: "Paid",
-      totalAmount: "$250.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV002",
-      paymentStatus: "Pending",
-      totalAmount: "$150.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV003",
-      paymentStatus: "Unpaid",
-      totalAmount: "$350.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV004",
-      paymentStatus: "Paid",
-      totalAmount: "$450.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
-    },
-  ];
+async function Expenses() {
+  const response = await getExpenses() 
+
+  const invoices = response.map((invoice: any) => ({
+    id: invoice.id,
+    type: invoiceType(invoice.type),
+    description: invoice.description,
+    amount: invoice.amount
+  }))
 
   return (
     <div>
@@ -192,14 +50,14 @@ function Expenses() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {invoices.map((invoice) => (
-                <TableRow key={invoice.invoice}>
+              {invoices.map((invoice: any) => (
+                <TableRow key={invoice.id}>
                   <TableCell className="font-medium">
-                    {invoice.invoice}
+                    {invoice.id}
                   </TableCell>
-                  <TableCell>{invoice.paymentStatus}</TableCell>
-                  <TableCell>{invoice.paymentMethod}</TableCell>
-                  <TableCell>{invoice.totalAmount}</TableCell>
+                  <TableCell>{invoice.type}</TableCell>
+                  <TableCell>{invoice.description}</TableCell>
+                  <TableCell>{formatter.format(invoice.amount)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

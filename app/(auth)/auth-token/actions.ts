@@ -20,21 +20,18 @@ export async function validateToken(state: TokenFormState, formData: FormData) {
   const cookie = (await cookies()).get('session')?.value
   const session = await decrypt(cookie)
 
-  try {
-    const response = await fetch(`${process.env.API_URL}auth/validateToken`, {
-      method: "POST",
-      body: JSON.stringify({ userId: session?.userId, token })
-    })
-    
-    const { success, user } = await response.json()
-    
-    if (success) {
-      await updateSession({ ...session, user })
-      return
-    }
-  } catch (error) {
-    console.log(error)
-  } finally {
-    redirect('/dashboard')
+  const response = await fetch(`${process.env.API_URL}/auth/validateToken`, {
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId: session?.userId, token })
+  })
+ 
+  const { success, user } = await response.json()
+
+  if (!success) {
+    return { message: 'Algo deu errado' }
   }
+  
+  await updateSession({ ...session, user })
+  redirect('/dashboard')
 }

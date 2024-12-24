@@ -40,6 +40,8 @@ function Signin() {
                 )}
               </div>
 
+              <p>{state?.message}</p>
+
               <Button type="submit" className="bg-[#00b490]" disabled={pending}>
                 Entrar
               </Button>

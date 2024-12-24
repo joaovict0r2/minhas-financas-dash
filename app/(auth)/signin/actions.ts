@@ -18,24 +18,24 @@ export async function signin(state: SigninFormState, formData: FormData) {
 
   const { email, phone } = validationResult.data
 
-  try {
-    const response = await fetch(`${process.env.API_URL}auth/signin`, {
-      method: "POST",
-      body: JSON.stringify({
-        email,
-        phone
-      })
+  const response = await fetch(`${process.env.API_URL}/auth/signIn`, {
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email,
+      phone
     })
-    
-    const { success, userId } = await response.json()
-    
-    if (success) {
-      await createSession(userId)
-      return
-    }
-  } catch (error) {
-    console.log(error)
-  } finally {
-    redirect('/auth-token')
+  })
+
+  if (!response.ok) {
+    return { message: 'Algo deu errado' }
   }
+  
+  const { userId } = await response.json()
+  
+  console.log(userId)
+
+  await createSession(userId)
+  // redirect('/auth-token') pulando essa parte por enquanto e mandando direto para a dashboard.
+  redirect('/dashboard')
 }

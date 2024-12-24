@@ -36,6 +36,8 @@ function AuthToken() {
                 </p>
               )}
             </div>
+
+            <p>{state?.message}</p>
             
             <Button type="submit" className="bg-[#00b490] w-full mt-5" disabled={pending}>
               Entrar

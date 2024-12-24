@@ -1,4 +1,6 @@
-import { decrypt } from "@/app/_lib/session";
+import { getDashboardExpenses } from "@/app/_data/dashboard-expenses";
+import ExpensesChart from "@/components/BarChart/BarChart";
+import CategoriesChart from "@/components/PieChart/PieChart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -8,64 +10,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatter, invoiceType } from "@/shared/utils";
 import { DollarSign, MoveDownRight, MoveUpRight } from "lucide-react";
-import { cookies } from "next/headers";
 
 async function Dashboard() {
-  const cookie = (await cookies()).get('session')?.value
-  const session = await decrypt(cookie)
+  const response = await getDashboardExpenses();
+  console.log(response);
 
-  console.log(session)
+  const thisMonthExpenses = response?.thisMonthExpenses || 0;
+  const thisMonthIncome = response?.thisMonthIncome || 0;
+  const monthTotalAmount = thisMonthIncome - thisMonthExpenses;
 
-  const invoices = [
-    {
-      invoice: "INV001",
-      paymentStatus: "Paid",
-      totalAmount: "$250.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV002",
-      paymentStatus: "Pending",
-      totalAmount: "$150.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV003",
-      paymentStatus: "Unpaid",
-      totalAmount: "$350.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV004",
-      paymentStatus: "Paid",
-      totalAmount: "$450.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
-    },
-  ];
+  const invoices = response?.lastWeekExpenses.map((expense) => ({
+    id: expense.id,
+    type: invoiceType(expense.type),
+    description: expense.description,
+    amount: expense.amount,
+  }));
 
   return (
     <div>
       <section className="mb-3 flex items-center justify-between space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -77,7 +43,9 @@ async function Dashboard() {
             <MoveDownRight size={16} />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">$45,231.89</div>
+            <div className="text-2xl font-bold text-red-600">
+              {formatter.format(thisMonthExpenses)}
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -88,7 +56,9 @@ async function Dashboard() {
             <MoveUpRight size={16} />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-700">+2350</div>
+            <div className="text-2xl font-bold text-green-700">
+              {formatter.format(thisMonthIncome)}
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -97,7 +67,13 @@ async function Dashboard() {
             <DollarSign size={16} />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-700">+12,234</div>
+            <div
+              className={`text-2xl font-bold ${
+                monthTotalAmount > 0 ? "text-green-700" : "text-red-600"
+              } `}
+            >
+              {formatter.format(monthTotalAmount)}
+            </div>
           </CardContent>
         </Card>
       </section>
@@ -120,14 +96,12 @@ async function Dashboard() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {invoices.map((invoice) => (
-                  <TableRow key={invoice.invoice}>
-                    <TableCell className="font-medium">
-                      {invoice.invoice}
-                    </TableCell>
-                    <TableCell>{invoice.paymentStatus}</TableCell>
-                    <TableCell>{invoice.paymentMethod}</TableCell>
-                    <TableCell>{invoice.totalAmount}</TableCell>
+                {invoices?.map((invoice) => (
+                  <TableRow key={invoice.id}>
+                    <TableCell className="font-medium">{invoice.id}</TableCell>
+                    <TableCell>{invoice.type}</TableCell>
+                    <TableCell>{invoice.description}</TableCell>
+                    <TableCell>{formatter.format(invoice.amount)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -136,7 +110,7 @@ async function Dashboard() {
         </Card>
       </section>
 
-      <section className="mt-5 w-full flex gap-5">
+      <section className="mt-5 w-full flex flex-col gap-5 md:flex-row">
         <Card className="flex-1 h-[500px]">
           <CardHeader className="pb-2">
             <CardTitle className="text-xl font-medium">
@@ -144,7 +118,9 @@ async function Dashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div></div>
+            <div className="w-full max-w-[730px] m-auto">
+              <ExpensesChart data={response?.lastWeekExpensesChart}/>
+            </div>
           </CardContent>
         </Card>
 
@@ -155,7 +131,9 @@ async function Dashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div></div>
+            <div className="w-full max-w-[730px] m-auto">
+              <CategoriesChart data={response?.categoriesPercentage}/>
+            </div>
           </CardContent>
         </Card>
       </section>

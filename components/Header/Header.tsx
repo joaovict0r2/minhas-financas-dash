@@ -34,7 +34,6 @@ function Header({ sticky }: HeaderProps) {
       <Separator orientation="vertical" className="h-6" />
 
       <div className="ml-auto flex items-center space-x-4">
-        <ThemeSwitch />
         <ProfileDropdown />
       </div>
     </header>

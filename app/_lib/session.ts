@@ -3,14 +3,21 @@ import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
+type Session = {
+  userId: number,
+  user: {
+    id: number,
+    created_at: string
+    nome: string
+    email: string
+    phone: string
+    thread_id: number
+    last_message_date: string
+  }
+}
+
 const secretKey = process.env.SECRET
 const encodedKey = new TextEncoder().encode(secretKey)
-
-const cookieConfig = {
-  name: 'session',
-  options: { httpOnly: true, secure: true, sameSite: 'lax', path: '/' },
-  duration: 24 * 60 * 60 * 1000
-}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function encrypt(payload: any) {
@@ -23,7 +30,7 @@ export async function encrypt(payload: any) {
 
 export async function decrypt(session: string | undefined = '') {
   try {
-    const { payload } = await jwtVerify(session, encodedKey, {
+    const { payload } = await jwtVerify<Session>(session, encodedKey, {
       algorithms: ['HS256'],
     })
     return payload
@@ -68,17 +75,17 @@ export async function updateSession(payload: any) {
 }
 
 export async function verifySession() {
-  const cookie = (await cookies()).get(cookieConfig?.name)?.value
+  const cookie = (await cookies()).get('session')?.value
   const session = await decrypt(cookie)
 
-  if (!session?.userId) {
+  if (!session?.user) {
     redirect('/signin')
   }
 
-  return { userId: session.userId }
+  return { isAuth: true, user: session.user }
 }
 
 export async function deleteSession() {
-  (await cookies()).delete(cookieConfig.name)
+  (await cookies()).delete('session')
   redirect('/signin')
 }
