@@ -44,10 +44,10 @@ export const getDashboardExpenses = cache(async () => {
     const { data }: DashboardData = await response.json();
     
     const thisMonthExpenses =
-      data.lastMonthData?.find((d) => d.type === "expense")?._sum?.amount || 0;
+      data?.lastMonthData.find((d) => d.type === "expense")?._sum?.amount || 0;
 
     const thisMonthIncome =
-      data.lastMonthData?.find((d) => d.type === "income")?._sum?.amount || 0;
+      data?.lastMonthData.find((d) => d.type === "income")?._sum?.amount || 0;
 
     const lastWeekExpensesChart: { expense_date: string; amount: number }[] =
       [];
