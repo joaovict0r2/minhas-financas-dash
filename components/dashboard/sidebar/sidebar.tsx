@@ -1,4 +1,4 @@
-import { Home, Inbox } from "lucide-react"
+import { Home, Inbox, Landmark } from "lucide-react"
 
 import {
   Sidebar,
@@ -22,6 +22,11 @@ const items = [
     title: "Meus gastos",
     url: "/expenses",
     icon: Inbox,
+  },
+  {
+    title: "Conecte seu banco",
+    url: "/bank-integration",
+    icon: Landmark,
   }
 ]
 
