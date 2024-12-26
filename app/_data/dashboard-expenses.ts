@@ -52,7 +52,7 @@ export const getDashboardExpenses = cache(async () => {
     const lastWeekExpensesChart: { expense_date: string; amount: number }[] =
       [];
 
-    for (const expense of data.lastWeekExpenses) {
+    for (const expense of data?.lastWeekExpenses) {
       if (expense.type !== "expense") {
         continue;
       }
@@ -76,8 +76,8 @@ export const getDashboardExpenses = cache(async () => {
       thisMonthExpenses,
       thisMonthIncome,
       lastWeekExpensesChart,
-      lastWeekExpenses: data.lastWeekExpenses,
-      categoriesPercentage: data.categoriesPercentage
+      lastWeekExpenses: data?.lastWeekExpenses,
+      categoriesPercentage: data?.categoriesPercentage
     }
   } catch (error) {
     console.log(error);
