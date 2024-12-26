@@ -42,17 +42,21 @@ export const getDashboardExpenses = cache(async () => {
   try {
     const response = await fetch(`${process.env.API_URL}/expenses/dashboard/${userIdPhone}`);
     const { data }: DashboardData = await response.json();
+
+    const lastWeekExpenses = data?.lastWeekExpenses || [];
+    const lastMonthData = data?.lastMonthData || [];
+    const categoriesPercentage = data?.categoriesPercentage || [];
     
     const thisMonthExpenses =
-      data?.lastMonthData.find((d) => d.type === "expense")?._sum?.amount || 0;
+      lastMonthData.find((d) => d.type === "expense")?._sum?.amount || 0;
 
     const thisMonthIncome =
-      data?.lastMonthData.find((d) => d.type === "income")?._sum?.amount || 0;
+      lastMonthData.find((d) => d.type === "income")?._sum?.amount || 0;
 
     const lastWeekExpensesChart: { expense_date: string; amount: number }[] =
       [];
 
-    for (const expense of data?.lastWeekExpenses) {
+    for (const expense of lastWeekExpenses) {
       if (expense.type !== "expense") {
         continue;
       }
@@ -76,8 +80,8 @@ export const getDashboardExpenses = cache(async () => {
       thisMonthExpenses,
       thisMonthIncome,
       lastWeekExpensesChart,
-      lastWeekExpenses: data?.lastWeekExpenses,
-      categoriesPercentage: data?.categoriesPercentage
+      lastWeekExpenses,
+      categoriesPercentage
     }
   } catch (error) {
     console.log(error);
