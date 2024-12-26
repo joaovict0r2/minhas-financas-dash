@@ -24,7 +24,7 @@ function BankIntegration() {
 
       fetchToken()
     }
-  }, [])
+  }, [connectToken])
 
   const onSuccess = async (itemData: { item: any; }) => {
     const data = await accountsTransactions(itemData.item.id) // itemId = (Nubank ID ou Caixa ID ou C6 Bank ID)
