@@ -20,7 +20,7 @@ async function Dashboard() {
   const thisMonthIncome = response?.thisMonthIncome || 0;
   const monthTotalAmount = thisMonthIncome - thisMonthExpenses;
 
-  const invoices = response?.lastWeekExpenses.map((expense) => ({
+  const invoices = response?.lastWeekExpenses?.map((expense) => ({
     id: expense.id,
     type: invoiceType(expense.type),
     description: expense.description,

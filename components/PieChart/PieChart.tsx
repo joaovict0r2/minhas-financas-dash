@@ -76,7 +76,7 @@ const CustomizedLegend = (props: any) => {
   const { payload } = props;
   return (
     <ul className="grid grid-cols-2 md:grid-cols-3 gap-1 list-none">
-      {payload.map((entry: any, index: any) => (
+      {payload?.map((entry: any, index: any) => (
         <li key={`item-${index}`}>
           <div className="flex items-center">
             <Bullet backgroundColor={entry.payload.fill} size="10px" />
@@ -92,7 +92,7 @@ function CategoriesChart({ data }: any) {
   const [activeIndex, setActiveIndex] = useState(0)
   const colors = generateColors(data?.length)
 
-  const chartData = data.map((i: any) => ({
+  const chartData = data?.map((i: any) => ({
     name: i.category,
     value: i.total_amount
   }));
@@ -116,7 +116,7 @@ function CategoriesChart({ data }: any) {
             dataKey="value"
             onMouseEnter={onPieEnter}
           >
-            {data.map((_:any, index: any) => (
+            {data?.map((_:any, index: any) => (
               <Cell key={`cell-${index}`} fill={colors[index]} />
             ))}
           </Pie>

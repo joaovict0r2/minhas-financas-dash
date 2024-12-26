@@ -23,7 +23,7 @@ function Expenses() {
 
   const fetchData = async (filter?: string) => {
     const response = await getExpenses(filter);
-    const formattedInvoices = response.map((invoice: any) => ({
+    const formattedInvoices = response?.map((invoice: any) => ({
       id: invoice.id,
       type: invoiceType(invoice.type),
       description: invoice.description,
@@ -66,7 +66,7 @@ function Expenses() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {invoices.map((invoice: any) => (
+              {invoices?.map((invoice: any) => (
                 <TableRow key={invoice.id}>
                   <TableCell className="font-medium">{invoice.id}</TableCell>
                   <TableCell>{invoice.type}</TableCell>
