@@ -3,7 +3,6 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
-import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
 import { useEffect, useState } from "react";
 import { cn } from "@/shared/utils";
 
