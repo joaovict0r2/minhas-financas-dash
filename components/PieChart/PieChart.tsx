@@ -90,7 +90,7 @@ const CustomizedLegend = (props: any) => {
 
 function CategoriesChart({ data }: any) {
   const [activeIndex, setActiveIndex] = useState(0)
-  const colors = generateColors(data.length)
+  const colors = generateColors(data?.length)
 
   const chartData = data.map((i: any) => ({
     name: i.category,

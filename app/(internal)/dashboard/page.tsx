@@ -15,7 +15,6 @@ import { DollarSign, MoveDownRight, MoveUpRight } from "lucide-react";
 
 async function Dashboard() {
   const response = await getDashboardExpenses();
-  console.log(response);
 
   const thisMonthExpenses = response?.thisMonthExpenses || 0;
   const thisMonthIncome = response?.thisMonthIncome || 0;

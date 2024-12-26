@@ -35,7 +35,7 @@ function ExpensesChart ({ data }: ChartBar) {
   // { expense_date: '2024-12-21', amount: 120.3 },
   // { expense_date: '2024-12-22', amount: 300.0 },
   // ];
-  const isDataEmpty = data.length === 0;
+  const isDataEmpty = data?.length === 0;
 
   return(
     <ResponsiveContainer width="100%" height={400}>

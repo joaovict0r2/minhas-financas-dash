@@ -1,3 +1,5 @@
+"use client";
+
 import { getExpenses } from "@/app/_data/expenses";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -10,16 +12,26 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatter, invoiceType } from "@/shared/utils";
+import { useEffect, useState } from "react";
 
-async function Expenses() {
-  const response = await getExpenses() 
+function Expenses() {
+  const [invoices, setInvoices] = useState([]);
 
-  const invoices = response.map((invoice: any) => ({
-    id: invoice.id,
-    type: invoiceType(invoice.type),
-    description: invoice.description,
-    amount: invoice.amount
-  }))
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async (filter?: string) => {
+    const response = await getExpenses(filter);
+    const formattedInvoices = response.map((invoice: any) => ({
+      id: invoice.id,
+      type: invoiceType(invoice.type),
+      description: invoice.description,
+      amount: invoice.amount,
+    }));
+
+    setInvoices(formattedInvoices);
+  };
 
   return (
     <div>
@@ -28,11 +40,15 @@ async function Expenses() {
           <h1 className="text-2xl font-bold">Meus gastos</h1>
         </section>
 
-        <Tabs className="mb-4">
+        <Tabs
+          className="mb-4"
+          defaultValue="30days"
+          onValueChange={(value) => fetchData(value)}
+        >
           <div className="w-full overflow-x-auto pb-2">
             <TabsList>
-              <TabsTrigger value="overview">Últimos 7 dias</TabsTrigger>
-              <TabsTrigger value="analytics">Últimos 30 dias</TabsTrigger>
+              <TabsTrigger value="7days">Últimos 7 dias</TabsTrigger>
+              <TabsTrigger value="30days">Últimos 30 dias</TabsTrigger>
             </TabsList>
           </div>
         </Tabs>
@@ -52,9 +68,7 @@ async function Expenses() {
             <TableBody>
               {invoices.map((invoice: any) => (
                 <TableRow key={invoice.id}>
-                  <TableCell className="font-medium">
-                    {invoice.id}
-                  </TableCell>
+                  <TableCell className="font-medium">{invoice.id}</TableCell>
                   <TableCell>{invoice.type}</TableCell>
                   <TableCell>{invoice.description}</TableCell>
                   <TableCell>{formatter.format(invoice.amount)}</TableCell>

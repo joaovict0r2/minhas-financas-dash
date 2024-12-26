@@ -42,7 +42,7 @@ export const getDashboardExpenses = cache(async () => {
   try {
     const response = await fetch(`${process.env.API_URL}/expenses/dashboard/${userIdPhone}`);
     const { data }: DashboardData = await response.json();
-    console.log(data)
+    
     const thisMonthExpenses =
       data.lastMonthData?.find((d) => d.type === "expense")?._sum?.amount || 0;
 

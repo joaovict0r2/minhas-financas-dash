@@ -10,7 +10,6 @@ export default async function middleware(req: NextRequest) {
 
   if (cookie) {
     session = await decrypt(cookie)
-    console.log(session)
   }
 
   const currentPath = req.nextUrl.pathname
